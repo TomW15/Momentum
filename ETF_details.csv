@@ -1,0 +1,325 @@
+Ticker,Industry
+AIRR,Energy
+AMJ,Consumer Staples
+AMLP,Technology
+AMU,Industrials
+BBC,Energy
+BBH,Energy
+BBP,Energy
+BDCL,Energy
+BDCS,Energy
+BIB,Energy
+BIS,Energy
+BIZD,Materials
+BJK,Healthcare
+CARZ,Healthcare
+CGW,Healthcare
+CHIE,Real Estate
+CHII,Financials
+CHIM,Financials
+CHIQ,Financials
+CHIX,Industrials
+COPX,Consumer Discretionary
+CQQQ,Healthcare
+CROP,Healthcare
+CURE,Financials
+CUT,Consumer Discretionary
+DDG,Technology
+DIG,Technology
+DRN,Energy
+DRV,Financials
+DRW,Financials
+DUG,Financials
+DUST,Financials
+ECON,Healthcare
+EMIF,Technology
+EMQQ,Materials
+ENFR,Consumer Discretionary
+ERUS,Industrials
+ERX,Energy
+ERY,Healthcare
+EUFN,Industrials
+EXI,Technology
+FAN,Materials
+FAS,Consumer Discretionary
+FAZ,Real Estate
+FBT,Consumer Staples
+FCG,Utilities
+FCOM,Financials
+FDIS,Healthcare
+FDN,Technology
+FENY,Consumer Staples
+FFR,Technology
+FHLC,Healthcare
+FIDU,Healthcare
+FILL,Energy
+FINU,Materials
+FINZ,Technology
+FIW,Energy
+FLM,Materials
+FMAT,Healthcare
+FNCL,Materials
+FRAK,Technology
+FRI,Energy
+FSTA,Industrials
+FTAG,Financials
+FTEC,Materials
+FTRI,Energy
+FUTY,Financials
+FXD,Energy
+FXG,Real Estate
+FXH,Real Estate
+FXL,Real Estate
+FXN,Energy
+FXO,Industrials
+FXR,Materials
+FXU,Consumer Discretionary
+FXZ,Utilities
+GASL,Consumer Staples
+GDX,Utilities
+GDXJ,Energy
+GII,Technology
+GNR,Consumer Staples
+GOEX,Energy
+GQRE,Energy
+GREK,Energy
+GRES,Energy
+GRI,Consumer Discretionary
+GRID,Financials
+GUNR,Financials
+HACK,Industrials
+HAP,Real Estate
+HAUZ,Industrials
+IAI,Energy
+IAK,Financials
+IAT,Financials
+IBB,Healthcare
+ICF,Energy
+ICLN,Telecom
+IDU,Consumer Discretionary
+IEO,Technology
+IEUS,Energy
+IEV,Real Estate
+IEZ,Healthcare
+IFEU,Industrials
+IFGL,Energy
+IGE,Financials
+IGF,Technology
+IGM,Financials
+IGN,Industrials
+IGV,Technology
+IHE,Industrials
+IHF,Materials
+IHI,Materials
+IMLP,Financials
+INCO,Energy
+ISRA,Real Estate
+ITA,Real Estate
+ITB,Consumer Staples
+IXC,Materials
+IXG,Technology
+IXJ,Materials
+IXN,Consumer Discretionary
+IXP,Consumer Staples
+IYC,Healthcare
+IYE,Technology
+IYF,Energy
+IYG,Financials
+IYH,Industrials
+IYJ,Utilities
+IYK,Consumer Discretionary
+IYM,Consumer Staples
+IYR,Healthcare
+IYT,Technology
+IYW,Energy
+IYZ,Financials
+JDST,Industrials
+JNUG,Utilities
+JXI,Materials
+KBE,Technology
+KBWB,Energy
+KBWD,Energy
+KBWP,Technology
+KBWR,Healthcare
+KBWY,Materials
+KCE,Materials
+KIE,Utilities
+KOL,Utilities
+KRE,Utilities
+KWEB,Healthcare
+KXI,Materials
+LIT,Materials
+LMLP,Materials
+LTL,Real Estate
+MLPA,Energy
+MLPC,Materials
+NXTG,Real Estate
+OIH,Energy
+PBD,Materials
+PBE,Energy
+PBJ,Technology
+PBS,Industrials
+PBW,Materials
+PEJ,Real Estate
+PEZ,Materials
+PFI,Real Estate
+PHO,Healthcare
+PICK,Financials
+PIO,Financials
+PJP,Financials
+PKB,Healthcare
+MLPG,Consumer Discretionary
+MLPI,Real Estate
+MLPO,Energy
+MLPX,Healthcare
+MLPY,Utilities
+MOO,Consumer Staples
+MORL,Consumer Discretionary
+MORT,Financials
+MXI,Healthcare
+NFRA,Healthcare
+NLR,Consumer Discretionary
+NUGT,Energy
+PMR,Technology
+PNQI,Technology
+PPA,Consumer Staples
+PPH,Energy
+PSCC,Real Estate
+PSCD,Real Estate
+PSCE,Utilities
+PSCF,Materials
+PSCH,Utilities
+PSCI,Technology
+PSCM,Technology
+PSCT,Technology
+PSCU,Technology
+PSI,Healthcare
+PSJ,Healthcare
+PSL,Healthcare
+PSP,Energy
+PSR,Consumer Discretionary
+PTF,Real Estate
+PTH,Utilities
+PUI,Technology
+PXE,Technology
+PXI,Technology
+PXJ,Industrials
+PXQ,Materials
+PYZ,Technology
+PZD,Energy
+QABA,Financials
+QCLN,Healthcare
+QQQ,Technology
+QTEC,Telecom
+RCD,Consumer Discretionary
+REET,Energy
+REK,Financials
+REM,Financials
+REMX,Healthcare
+RETL,Industrials
+REW,Consumer Staples
+REZ,Materials
+RGI,Real Estate
+RHS,Industrials
+RING,Technology
+ROBO,Telecom
+ROM,Technology
+ROOF,Materials
+RTH,Industrials
+RTM,Materials
+RWO,Consumer Discretionary
+RWR,Energy
+RWW,Financials
+RWX,Healthcare
+RXD,Industrials
+RXI,Consumer Staples
+RXL,Technology
+RYE,Utilities
+RYF,Materials
+RYH,Utilities
+RYT,Financials
+RYU,Financials
+SBIO,Financials
+SBM,Financials
+SCC,Financials
+SCHH,Real Estate
+SDP,Financials
+SEA,Technology
+SEF,Financials
+SGDM,Healthcare
+SIJ,Financials
+SIL,Technology
+SILJ,Energy
+SKF,Financials
+SKYY,Healthcare
+SLVP,Technology
+SLX,Consumer Staples
+SMH,Healthcare
+SMN,Healthcare
+SMOG,Consumer Staples
+SOCL,Financials
+SOIL,Technology
+SOXL,Financials
+SOXS,Materials
+SOXX,Financials
+SRS,Healthcare
+SSG,Technology
+SZK,Real Estate
+TAN,Telecom
+TAO,Energy
+TDIV,Energy
+TECL,Energy
+TECS,Real Estate
+TOLZ,Telecom
+UCC,Technology
+UGE,Energy
+UPW,Real Estate
+URA,Consumer Discretionary
+URE,Consumer Staples
+USD,Consumer Discretionary
+USRT,Industrials
+UXI,Energy
+UYG,Healthcare
+UYM,Consumer Staples
+VAW,Consumer Discretionary
+VCR,Energy
+VDC,Consumer Discretionary
+VDE,Financials
+VEGI,Consumer Discretionary
+VFH,Financials
+VGT,Industrials
+VHT,Materials
+VIS,Healthcare
+VNQ,Industrials
+VNQI,Healthcare
+VOX,Materials
+VPU,Energy
+VQT,Energy
+WOOD,Energy
+WPS,Energy
+XAR,Energy
+XBI,Energy
+XES,Energy
+XHB,Energy
+XHE,Materials
+XHS,Real Estate
+XLB,Real Estate
+XLE,Real Estate
+XLF,Materials
+XLI,Materials
+XLK,Materials
+XLP,Consumer Staples
+XLU,Consumer Discretionary
+XLV,Real Estate
+XLY,Utilities
+XME,Energy
+XNTK,Energy
+XOP,Energy
+XPH,Energy
+XRT,Energy
+XSD,Materials
+XSW,Consumer Discretionary
+XTL,Technology
+XTN,Healthcare
+YMLP,Industrials
+ZMLP,Healthcare
