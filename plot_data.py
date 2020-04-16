@@ -11,6 +11,10 @@ import pandas as pd
 import random
 
 def plot_single_data(df):
+    """
+        Using the dataframe df, plot the data stored in it on a single axis as
+        normal, formatting the plot using the column names to get the x and y labels    
+    """
     x_axis = df.columns[0]
     y_axis = df.columns[1]
     
@@ -32,6 +36,11 @@ def plot_single_data(df):
     plt.show()
     
 def plot_diff_axis(df1, df2, title=""):
+    """
+        Using the two dataframes, plot all the data stored in df1 on the left hand
+        side axis and plot all the data stored in df2 on the right hand side axis.
+        Format the plot to have proper title, axis labels and legend.
+    """
     x_axis = df1.columns[0]
     
     if type(df1.index) == pd.core.indexes.range.RangeIndex:
@@ -75,6 +84,10 @@ def plot_diff_axis(df1, df2, title=""):
     plt.show()
     
 def plot_same_axis(df, title=""):
+    """
+        Plot all data stored in df on LHS axis, formatting the plot with appropriate
+        title, axis labels and legend.
+    """
     x_axis = df.columns[0]
     
     if type(df.index) == pd.core.indexes.range.RangeIndex:
@@ -108,6 +121,9 @@ def plot_same_axis(df, title=""):
     plt.show()
     
 def plot_scatter(df):
+    """
+        Plot the data in df using a scatter graph.
+    """
     x_axis = df.columns[0]
     df = df.set_index(x_axis)
   

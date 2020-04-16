@@ -15,38 +15,42 @@ folder = "ETF_Analysis"
 def get_details(cur1="GBP", cur2="USD"):
     
     def get_list(my_list, pattern = "'(.*?)'"):
+        # Using regex and the pattern to find all instances
         return re.findall(pattern, my_list)
-        
+    # Get the list of tickers from saved pickle file   
     with open('universe_tickers.pickle', 'rb') as f:
         tickers = pickle.load(f)
-        
+    # Get the information saved in the 'WML_Old.csv'  
     dfList = pd.read_csv(folder+'/WML_Old.csv')
     
+    # Get price data from 'All_data.csv' and format correctly
     prices = pd.read_csv(folder+'/All_data.csv')
     prices = prices.set_index('Date')
     prices = pd.DataFrame.fillna(prices, 0)
     
+    # Get the exchange rates for the investment period and format
     forex = pd.read_csv('forex_{}_{}.csv'.format(cur1, cur2)).set_index('Date')
-#    forex = forex
     
+    # Get the returns from the 'log_returns.csv' and format correctly
     returns = pd.read_csv(folder+'/log_returns.csv')
     returns = pd.DataFrame.fillna(returns, 0)
     returns = returns.set_index('Date')
-
+    
+    # Initialize two empty lists to contain all sets of winners and losers
     winners = []
     losers = []
-
+    # Add sets of winners and losers
     for i in range(dfList.shape[0]):
         winners.append(get_list(dfList['Winners'][i]))
         losers.append(get_list(dfList['Losers'][i]))
-
+    # Get all necessary start and end dates for formation, holding and scaling periods
     startF = dfList['StartF']
     endF = dfList['EndF']
     startH = dfList['StartH']
     endH = dfList['EndH']
     startS = dfList['StartS']
     endS = dfList['EndS']
-    
+    # Return all information
     return tickers, prices, returns, winners, losers, startF, endF, startH, endH, startS, endS, forex
     
 def scaling_variance(returns, winners, losers, startS, endS, targetSD = np.sqrt(12)/100, momentumWeight = 0.5):
@@ -87,14 +91,14 @@ def scaling_variance(returns, winners, losers, startS, endS, targetSD = np.sqrt(
     
     # Return the volatility-scaled weight for the momentum strategy with target variance equal to 12%
     # and multiply the weight by 0.5 as this is 50% of our portfolio strategy
-    return round(targetSD/scalingSD * momentumWeight,2), scalingSD
+    return targetSD/scalingSD * momentumWeight, scalingSD
 
 def New_Portfolio(tickers, hedge, winners, losers, momWeight):
     positions = {ticker:0 for ticker in (tickers+hedge)}
     
     for win, lose in zip(winners, losers):
-        positions[win] = momWeight/4
-        positions[lose] = -momWeight/4 # have to check if divide by 4 is correct or should it be 8?
+        positions[win] = momWeight/8
+        positions[lose] = -momWeight/8
     
     positions['VTV'] = (1-momWeight)/2
     positions['SPY'] = -(1-momWeight)/2
@@ -146,7 +150,7 @@ def costChanges(positions, pos_changes, value, prices, date, vol_charge_per_shar
 
             price = prices[ticker][date]
             invested = value*abs(pos_changes[ticker])
-            shares[ticker] = invested/price # Not sure if we can invest in fractions but very small difference I assume
+            shares[ticker] = invested/price
             
             # Volume Costs
             volume_charge = vol_charge_per_share*shares[ticker]
@@ -175,68 +179,45 @@ def costChanges(positions, pos_changes, value, prices, date, vol_charge_per_shar
                 exchange_charge = -0.002
                 
             Cost = (volume_charge+trans_charge+clearing_charge+pass_thru_charge+exchange_charge)
-#            print("Cost for {} is {}".format(ticker, Cost))
+
             totalCost += Cost
-#            print("Volume Charge: ", volume_charge)
-#            print("Transaction Charge: ", trans_charge)
-#            print("Clearing Charge: ", clearing_charge)
-#            print("Pass-Thru Charge: ", pass_thru_charge)
-#            print("Exchange Charge: ", exchange_charge)
-#            print("Total Cost: ", totalCost)
-    
-    return round(totalCost,2)
+
+    return totalCost
 
 def invest(prices, tickers, hedge, winners, losers, investment, momWeight, startH):
-    
+    # Get the hedge weight from momentum weight found previously
     hedgeWeight = 1 - momWeight
-    
+    # Set shares in all ETFs to 0, including hedge
     shares = {ticker:0 for ticker in (tickers+hedge)}
+    # Loop through set of winners and losers for current month and calculate number of shares in each
     for win, lose in zip(winners, losers):
-        shares[win] = (investment*momWeight/4)/prices[win][startH]
-        shares[lose] = -(investment*momWeight/4)/prices[lose][startH]
-    
-    shares['VTV'] = investment*hedgeWeight/prices['VTV'][startH]
-    shares['SPY'] = -investment*hedgeWeight/prices['SPY'][startH]
-
+        shares[win] = (investment*momWeight/8)/prices[win][startH]
+        shares[lose] = -(investment*momWeight/8)/prices[lose][startH]
+    # Calculate number of shares in hedge for current month
+    shares['VTV'] = (investment*hedgeWeight/2)/prices['VTV'][startH]
+    shares['SPY'] = -(investment*hedgeWeight/2)/prices['SPY'][startH]
+    # Return dictionary for later use
     return shares
     
 def get_value(prices, shares, winners, losers, hedge, dfValue, forex, value):
+    # Get dates from price data for holding month
     dates = list(prices.index.values)
+    # Initialize empty lists to save portfolio value in USD and GBP
     port_value_USD, port_value_GBP = [], []
+    # Loop through all dates in month
     for date in dates:
+        # Find portfolio value in USD using number of shares invested in at start of month
         port_value_USD.append(sum([shares[ticker]*prices[ticker][date] for ticker in (winners+losers+hedge)])+value)
+        # Convert portfolio value into GBP using exchange rate in forex dataframe
         port_value_GBP.append(port_value_USD[-1]/forex['FX'][date])
-    
+    # Store portfolio value in USD and GBP in a dataframe
     port_value = pd.DataFrame({'Date':dates, 'Port. Value (USD)': port_value_USD, 'Port. Value (GBP)': port_value_GBP}).set_index('Date')
-    
+    # Combine previous portfolio values with current investment month
     port_value = pd.concat([dfValue, port_value])
-    
+    # Get the monthly return using the value as start and value at end
     monthlyReturn = np.log(port_value_USD[-1]/value)
+    # Get momentum return and hedge return over investment period
     momReturn = sum([shares[ticker]*prices[ticker][date] for ticker in (winners+losers)])
     hedgeReturn = sum([shares[ticker]*prices[ticker][date] for ticker in hedge])
-    
+    # Return portfolio value and return of strategy
     return port_value, monthlyReturn, momReturn, hedgeReturn
-
-
-
-"""
-    Functions:
-        
-        - Get winners and losers for current period
-            - XXX Get scaling period variance for momentum scaling using winners and losers
-            
-            - XXX Get weights function using scaling period variance
-            
-            - if first investment period, calculate cost of implementing strategy
-            - else calculate change in investments and calculate cost of changing portfolio
-            
-            - Get costs for changing investments
-            
-            - Choice to do cumulative or Chris' way of investing
-            
-            - Return RiskMetrics, Cumulative Return, Monthly Returns, Monthly Standard Deviation, Daily Return
-            
-        - Allow optional changes to hedge dynamics
-        - Smooth weight investing, only perform if weight/investment is significantly different
-
-"""
