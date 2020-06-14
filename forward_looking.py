@@ -11,7 +11,7 @@ import pandas as pd
 from collections import OrderedDict
 from operator import itemgetter
 
-import strategy_implementation_functions
+import strategy_implementation_functions as sif
 import plot_data
 
 def get_cum_returns(universe, cum_log_ret_universe, start, end):
@@ -100,7 +100,7 @@ def predict_investment(data, tickers, clr, win_los, future_month, folder="ETF_An
     print("Long: " + b)
     print("Short: " + c)    
     
-def current_investment(data, tickers, clr, win_los, cur1="GBP", cur2="USD", folder="ETF_Analysis", start_value=1):
+def current_investment(data, tickers, clr, win_los, cur1="GBP", cur2="USD", folder="ETF_Analysis", start_value=10000):
     
     # Get a list of all possible investment initializations from the data we have collected 
     dates=list(data.index.values)[-31:] + [dt.datetime.now().strftime("%Y-%m-%d")]
@@ -128,30 +128,36 @@ def current_investment(data, tickers, clr, win_los, cur1="GBP", cur2="USD", fold
     curr_winners, curr_losers = order_current[:win_los], order_current[-win_los:]    
 
     # Get prices from current month's holding period as well as returns and exchange rate over same period
-    prices = pd.read_csv(folder+'/All_data.csv').set_index('Date')[start_current_hold:]
-    returns = pd.read_csv(folder+'/log_returns.csv')
+    prices = pd.read_csv(folder+'/All_data.csv').drop_duplicates(subset='Date').set_index('Date')[start_current_hold:].dropna()
+    returns = pd.read_csv(folder+'/log_returns.csv').drop_duplicates(subset='Date')
     returns = pd.DataFrame.fillna(returns, 0).set_index('Date')
     forex = pd.read_csv('forex_{}_{}.csv'.format(cur1, cur2)).set_index('Date')[start_current_hold:]
     
-    # Initialize portfolio_value with standard amount start_value set as default to 1
-    portfolio_value = pd.DataFrame([("Initial Investment", start_value, start_value/forex['FX'][start_current_hold])], columns = ["Date", "Port. Value (USD)", "Port. Value (GBP)"]).set_index("Date")
-
-    # Use scaling_variance function in strategy_implementation_functions.py to get momentum weight and scaling standard deviation
-    weight, scalingSD = strategy_implementation_functions.scaling_variance(returns, curr_winners, curr_losers, start_current_scale, end_current_scale)
-    # Use invest function in strategy_implementation_functions.py to get number of shares of each winner, loser and hedge given weight invested in momentum
-    shares = strategy_implementation_functions.invest(prices, tickers[:-2], tickers[-2:], curr_winners, curr_losers, start_value, weight, start_current_hold)   
-    # # Use get_value function in strategy_implementation_functions.py to get the portfolio value from current month's investment
-    portfolio_value, monthReturn, momReturn, hedgeReturn = strategy_implementation_functions.get_value(prices, shares, curr_winners, curr_losers, tickers[-2:], portfolio_value, forex, start_value)
+    try:
+        # Initialize portfolio_value with standard amount start_value set as default to 1
+        portfolio_value = pd.DataFrame([("Initial Investment", start_value, start_value/forex['FX'][start_current_hold])], columns = ["Date", "Port. Value (USD)", "Port. Value (GBP)"]).set_index("Date")
     
-    # Calculate return of strategy in USD and GBP as well as the benchmark (SPY)
-    USD_value = (portfolio_value['Port. Value (USD)']/portfolio_value['Port. Value (USD)'][start_current_hold]-1)[start_current_hold:]
-    GBP_value = (portfolio_value['Port. Value (GBP)']/portfolio_value['Port. Value (GBP)'][start_current_hold]-1)[start_current_hold:]
-    benchmark_value = prices['SPY']/prices['SPY'][start_current_hold]-1
-    
-    monthReturn = pd.concat([USD_value, GBP_value, benchmark_value], axis=1, join='inner').reset_index()
-    
-    # Use plot_diff_axis function in plot_data.py to plot USD_value, GBP_value and benchmark on left y-axis and exchange rate over period on right y-axis
-    plot_data.plot_diff_axis(monthReturn, forex.reset_index())
+        # Use scaling_variance function in strategy_implementation_functions.py to get momentum weight and scaling standard deviation
+        weight, scalingSD = sif.scaling_variance(returns, curr_winners, curr_losers, start_current_scale, end_current_scale)
+        # Use invest function in strategy_implementation_functions.py to get number of shares of each winner, loser and hedge given weight invested in momentum
+        shares = sif.invest(prices, tickers[:-2], tickers[-2:], curr_winners, curr_losers, start_value, weight, start_current_hold)   
+        # # Use get_value function in strategy_implementation_functions.py to get the portfolio value from current month's investment
+        portfolio_value, monthReturn, momReturn, hedgeReturn = sif.get_value(prices, shares, curr_winners, curr_losers, tickers[-2:], portfolio_value, forex, start_value)
+        
+        # Calculate return of strategy in USD and GBP as well as the benchmark (SPY)
+        USD_value = (portfolio_value['Port. Value (USD)']/portfolio_value['Port. Value (USD)'][start_current_hold]-1)[start_current_hold:]
+        GBP_value = (portfolio_value['Port. Value (GBP)']/portfolio_value['Port. Value (GBP)'][start_current_hold]-1)[start_current_hold:]
+        SPY_value = prices['SPY']/prices['SPY'][start_current_hold]-1
+        VTV_value = prices['VTV']/prices['VTV'][start_current_hold]-1
+        
+        monthReturn = pd.concat([USD_value, GBP_value, SPY_value, VTV_value], axis=1, join='inner').reset_index()
+        
+        # Use plot_diff_axis function in plot_data.py to plot USD_value, GBP_value and benchmark on left y-axis and exchange rate over period on right y-axis
+        plot_data.plot_diff_axis(monthReturn, forex.reset_index())
+        print(curr_winners, weight)
+    except KeyError:
+        # Means a new month has started but data isn't available yet for that month
+        pass
     
     
     

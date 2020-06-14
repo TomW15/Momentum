@@ -97,11 +97,11 @@ def New_Portfolio(tickers, hedge, winners, losers, momWeight):
     positions = {ticker:0 for ticker in (tickers+hedge)}
     
     for win, lose in zip(winners, losers):
-        positions[win] = momWeight/8
-        positions[lose] = -momWeight/8
+        positions[win] = momWeight/4
+        positions[lose] = -momWeight/4
     
-    positions['VTV'] = (1-momWeight)/2
-    positions['SPY'] = -(1-momWeight)/2
+    positions['VTV'] = (1-momWeight)/1
+    positions['SPY'] = -(1-momWeight)/1
     return positions
 
 def costChanges(positions, pos_changes, value, prices, date, vol_charge_per_share=0.0035, clear_charge_per_share = 0.002, quoteDriven = True, totalCost = 0):
@@ -191,11 +191,11 @@ def invest(prices, tickers, hedge, winners, losers, investment, momWeight, start
     shares = {ticker:0 for ticker in (tickers+hedge)}
     # Loop through set of winners and losers for current month and calculate number of shares in each
     for win, lose in zip(winners, losers):
-        shares[win] = (investment*momWeight/8)/prices[win][startH]
-        shares[lose] = -(investment*momWeight/8)/prices[lose][startH]
+        shares[win] = (investment*momWeight/4)/prices[win][startH]
+        shares[lose] = -(investment*momWeight/4)/prices[lose][startH]
     # Calculate number of shares in hedge for current month
-    shares['VTV'] = (investment*hedgeWeight/2)/prices['VTV'][startH]
-    shares['SPY'] = -(investment*hedgeWeight/2)/prices['SPY'][startH]
+    shares['VTV'] = (investment*hedgeWeight/1)/prices['VTV'][startH]
+    shares['SPY'] = -(investment*hedgeWeight/1)/prices['SPY'][startH]
     # Return dictionary for later use
     return shares
     
@@ -210,6 +210,7 @@ def get_value(prices, shares, winners, losers, hedge, dfValue, forex, value):
         port_value_USD.append(sum([shares[ticker]*prices[ticker][date] for ticker in (winners+losers+hedge)])+value)
         # Convert portfolio value into GBP using exchange rate in forex dataframe
         port_value_GBP.append(port_value_USD[-1]/forex['FX'][date])
+        
     # Store portfolio value in USD and GBP in a dataframe
     port_value = pd.DataFrame({'Date':dates, 'Port. Value (USD)': port_value_USD, 'Port. Value (GBP)': port_value_GBP}).set_index('Date')
     # Combine previous portfolio values with current investment month

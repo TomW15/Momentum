@@ -9,11 +9,11 @@ import datetime as dt
 import sys
 
 # Import modules from files
-import data_collection
-import load_forex
-import winners_minus_losers
-import implement_strategy
-import forward_looking
+import data_collection as col
+import load_forex as fx
+import winners_minus_losers as wml
+import implement_strategy as imp
+import forward_looking as fl
 
 hedge = ["VTV", "SPY"]
 
@@ -25,26 +25,26 @@ end = dt.datetime.now()
 startC = start
 endC = end
 #startC = dt.datetime(2010, 1, 1)
-#endC = dt.datetime(2014, 12, 31)
+#endC = dt.datetime(2011, 1, 31)
 
 # Set custom settings
 recluster = True # Checks if you want to recluster or use last cluster
 cluster_on = 1.00 # The value of correlation you want to cluster up to
 winners_losers = 4 # Number of Winners and Losers strategy invests in
-investment_in = 1 # Allows you to see the current winners and losers in this "investment_in" months time so 0 is current month
+investment_in = 0 # Allows you to see the current winners and losers in this "investment_in" months time so 0 is current month
 
 print("In data_collection.py...")
-tickers, data, clr = data_collection.get_data_from_yahoo(start, end, recluster, cluster_on, startC, endC, hedge)
+tickers, data, clr = col.get_data_from_yahoo(start, end, recluster, cluster_on, startC, endC, hedge)
 print("In winners_minus_losers.py...")
-winners_minus_losers.WinnersMinusLosers(tickers, data, clr, winners_losers)
+wml.WinnersMinusLosers(tickers, data, clr, winners_losers)
 print("In forex.py...")
-load_forex.get_forex()
+fx.get_forex()
 print("In implement_strategy.py...")
-implement_strategy.strategy()
+imp.strategy()
 print("In forward_looking.py (current investment)...")
-forward_looking.current_investment(data, tickers, clr, winners_losers)
-print("In prediction.py (predict {} month investment)...".format(investment_in))
-forward_looking.predict_investment(data, tickers, clr, winners_losers, investment_in)
+fl.current_investment(data, tickers, clr, winners_losers)
+print("In prediction.py (predict investment in {} month)...".format(investment_in))
+fl.predict_investment(data, tickers, clr, winners_losers, investment_in)
 print("Finished!")
 
 ###############################################################################

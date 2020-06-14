@@ -90,17 +90,18 @@ def strategy():
     # Get the returns from the value of the portfolio using initial 10000 portfolio value
     port_returns_USD = [np.log(port_value_USD[t]/port_value_USD[0]) for t in range(len(port_value_USD))]
     port_returns_GBP = [np.log(port_value_GBP[t]/port_value_GBP[0]) for t in range(len(port_value_GBP))]
-    
-    
+        
     # Start plotting results:
     
     # Plot Monthly Returns, Momentum Returns, Hedge Returns
     strategy_returns = pd.DataFrame({'Month':startH[:(t+1)], 'Monthly': monthlyReturns, 'Momentum':momReturns, 'Hedge':hedgeReturns})
     plot_data.plot_same_axis(strategy_returns)
+#    print(strategy_returns)
     
     # Plot Daily Returns in USD, GBP and FOREX - fix colours
     port_returns = pd.DataFrame({'Date':list(prices[startH[0]:endH.iloc[t]].index.values), 'Port. Return (USD)': port_returns_USD[1:], 'Port. Return (GBP)': port_returns_GBP[1:]})
     plot_data.plot_diff_axis(port_returns, forex[startH[0]:endH[t]])
+#    print(port_returns[2280:])
     
     # Plot momentum weights versus portfolio standard deviation of that month
     within_monthSD = [statistics.stdev(port_returns.set_index('Date')['Port. Return (USD)'][startH[t]:endH[t]]) for t in range(len(winners))]

@@ -252,6 +252,11 @@ def get_data_from_yahoo(start, end, recluster, cluster_on, startC, endC, hedge):
                     main_df = main_df.join(df, how='outer')
             except TypeError:
                 tickers.remove(ticker)
+                
+    main_df=main_df.reset_index()
+    main_df=main_df.drop_duplicates(subset='Date', keep='first')
+    main_df=main_df.set_index("Date")
+
 
     # Get log returns and cumulative log returns for available data
     log_ret, cum_log_ret = get_cum_log_returns(main_df)
